@@ -27,7 +27,10 @@ app.use("/", indexRouter);
 const categoriaRouter = require("./routes/categorias");
 const professorRouter = require("./routes/professor");
 const alunoRouter = require("./routes/aluno");
+const cursosRouter = require("./routes/curso");
 const duplaRouter = require("./routes/dupla");
+const livroRouter = require("./routes/livro");
+const autorRouter = require("./routes/autor");
 
 
 //const produtoRouter = require("./routes/produtos");
@@ -36,6 +39,9 @@ app.use("/categorias", categoriaRouter);
 app.use("/professores", professorRouter);
 app.use('/dupla', duplaRouter)
 app.use("/alunos", alunoRouter);
+app.use("/cursos", cursosRouter);
+app.use("/livros", livroRouter);
+app.use("/autores", autorRouter);
 
 
 // Iniciar o servidor e sincronizar com o banco de dados

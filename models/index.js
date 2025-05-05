@@ -14,9 +14,7 @@ db.Curso = require("./curso")(sequelize, DataTypes);
 db.Livro = require("./livro")(sequelize, DataTypes);
 db.Autor = require("./autor")(sequelize, DataTypes);
 
-
 //db.User = require("./user")(sequelize, DataTypes);
-
 // Configurações de associações
 
 Object.keys(db).forEach((modelName) => {

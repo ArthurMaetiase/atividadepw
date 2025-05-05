@@ -1,58 +1,108 @@
 const express = require('express');
 const router = express.Router();
-const { Livro } = require('../models');
+const { Livro, Autor } = require('../models');
 
 router.get("/", async (req, res) => {
-    const livros = await Livro.findAll();
-    res.render(
-        "base", {
-            title: "Listar Categorias",
+    try {
+        const livros = await Livro.findAll({
+          include: [{ model: Autor, as: "Autor" }],
+        }); 
+        res.render("base", {
+            title: "Livros",
             view: "livros/show",
-            atribuicoes,
+            livros,
+          });
+        }
+        catch (err) {
+            console.error(err);
+            res.status(500).send("Erro ao recuperar produtos");
+          }
     });
-});
+
 
 router.get("/add", async (req, res) => {
-    res.render(
-        "base", {
-            title: "Adicionar Livro",
-            view: "livros/add",
+  try {
+    const autores = await Autor.findAll();
+    res.render("base", {
+      title: "Add Livro",
+      view: "livros/add",
+      livros,
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao recuperar autores");
+  }
 });
 
-router.post("/add", async(req, res) =>{
+router.post("/add", async (req, res) => {
+  try {
+    const { nome, telefone, cursoId } = req.body;
     await Livro.create({
-        titulo: req.body.titulo,
-        tema: req.body.tema,
-
+      titulo,
+      tema,
+      autorId,
     });
-    res.redirect("/livros")
+    res.redirect("/livros");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao adicionar livro");
+  }
 });
 
 router.get("/edit/:id", async (req, res) => {
-    const livro = await Livro.findByPk(req.params.id);
-    res.render(
-        "base", {
-            title: "Editar Livro",
-            view: "livros/edit",
-            livro,
+  try {
+    const { id } = req.params;
+    const livro = await Livro.findByPk(id, {
+      include: [{ model: Autor, as: "Autor" }],
     });
+    const autores = await Autores.findAll();
+    if (livro) {
+      res.render("base", {
+        title: "Edit Livro",
+        view: "livros/edit",
+        livro,
+        autores,
+      });
+    } else {
+      res.status(404).send("Livro não encontrado");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao recuperar livro");
+  }
 });
 
-router.post("/edit/:id", async(req, res) =>{
-    await Livro.update(
-        {
-            titulo: req.body.titulo,
-            tema: req.body.tema,
-        },
-        {where:{id: req.params.id}}
-    );
-    res.redirect("/atribuicoes")
+router.post("/edit/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { titulo, tema, autorId } = req.body;
+    const livro = await Livro.findByPk(id);
+    if (livro) {
+      await livro.update({ titulo, tema, autorId });
+      res.redirect("/livros");
+    } else {
+      res.status(404).send("Livro não encontrado");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao atualizar o livro");
+  }
 });
 
-router.post("/delete/:id", async(req, res) =>{
-    await Atribuicao.destroy({where:{id: req.params.id}});
-    res.redirect("/atribuicoes")
+router.post("/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const livro = await Livro.findByPk(id);
+    if (livro) {
+      await livro.destroy();
+      res.redirect("/livros");
+    } else {
+      res.status(404).send("Livro não encontrado");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao excluir livro");
+  }
 });
 
 module.exports = router;

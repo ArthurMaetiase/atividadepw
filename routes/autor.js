@@ -1,106 +1,51 @@
 const express = require("express");
 const router = express.Router();
-const { Autor, Livro } = require("../models"); 
+const { Autor } = require("../models"); 
 
 router.get("/", async (req, res) => {
-  try {
-    const autores = await Produto.findAll({
-      include: [{ model: Livro, as: "Livro" }],
-    }); 
-
-    res.render("base", {
-      title: "Autores",
-      view: "autores/show",
-      autores,
+    const autores = await Autor.findAll();
+    res.render(
+        "base", {
+            title: "Listar autores",
+            view: "autores/show",
+            autores,
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao recuperar autores");
-  }
-});
+  });
 
 router.get("/add", async (req, res) => {
-  try {
-    const livros = await Livro.findAll();
-    res.render("base", {
-      title: "Add Autor",
-      view: "autores/add",
-      livros,
+    res.render(
+        "base", {
+            title: "Adicionar Autor",
+            view: "autores/add",
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao recuperar livros");
-  }
 });
 
-router.post("/add", async (req, res) => {
-  try {
-    const { nome, email } = req.body;
-    await Autor.create({
-      nome,
-      email
-    });
-    res.redirect("/boletins");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao adicionar autor");
-  }
+router.post("/add", async(req, res) =>{
+    await Autor.create({nome: req.body.nome});
+    res.redirect("/cursos")
 });
 
 router.get("/edit/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const autor = await Autor.findByPk(id, {
-      include: [{ model: Livro, as: "Livro" }],
+    const autor = await Autor.findByPk(req.params.id);
+    res.render(
+        "base", {
+            title: "Editar Autor",
+            view: "autor/edit",
+            autor,
     });
-    const livros = await Livro.findAll();
-    if (autor) {
-      res.render("base", {
-        title: "Edit Autor",
-        view: "autores/edit",
-        autor,
-        email,
-      });
-    } else {
-      res.status(404).send("Autor não encontrado");
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao recuperar autor");
-  }
 });
 
-router.post("/edit/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { nome, email } = req.body;
-    const autor = await Autor.findByPk(id);
-    if (autor) {
-      await autor.update({ nome, email });
-      res.redirect("/autores");
-    } else {
-      res.status(404).send("Autor não encontrado");
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao atualizar o autor");
-  }
+router.post("/edit/:id", async(req, res) =>{
+    await Autor.update(
+        {nome: req.body.nome},
+        {where:{id: req.params.id}}
+    );
+    res.redirect("/autores")
 });
 
-router.post("/delete/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const autor = await Autor.findByPk(id);
-    if (autor) {
-      await autor.destroy();
-      res.redirect("/autores");
-    } else {
-      res.status(404).send("Autor não encontrado");
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao excluir boletim");
-  }
+router.post("/delete/:id", async(req, res) =>{
+    await Autor.destroy({where:{id: req.params.id}});
+    res.redirect("/autores")
 });
 
 module.exports = router;

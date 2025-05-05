@@ -1,0 +1,8 @@
+<h1>Editar Livro</h1>
+<form action="/livros/edit/<%= livro.id %>" method="POST">
+    <div class="form-group">
+        <label for="nome">Livros</label>
+        <input type="text" class="form-control" id="nome" name="nome" value="<%= livro.titulo %>" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Atualizar</button>
+</form>

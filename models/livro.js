@@ -12,11 +12,11 @@ module.exports=(sequelize, DataTypes) => {
 
     Livro.associate = (models) => {
         Livro.belongsTo(models.Autor, {
-            foreignKey: 'AutorID',
+            foreignKey: 'autorID',
             as: 'Autor'
         })
     
     }
 
     return Livro
-}
+};
