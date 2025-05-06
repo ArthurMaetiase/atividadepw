@@ -1,24 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { Livro, Autor } = require('../models');
+const { Livro, Autor } = require("../models");
 
 router.get("/", async (req, res) => {
-    try {
-        const livros = await Livro.findAll({
-          include: [{ model: Autor, as: "Autor" }],
-        }); 
-        res.render("base", {
-            title: "Livros",
-            view: "livros/show",
-            livros,
-          });
-        }
-        catch (err) {
-            console.error(err);
-            res.status(500).send("Erro ao recuperar produtos");
-          }
+  try {
+    const livros = await Livro.findAll({
+      include: [{ model: Autor, as: "Autor" }],
     });
 
+    res.render("base", {
+      title: "livros",
+      view: "livros/show",
+      livros,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao recuperar livros");
+  }
+});
 
 router.get("/add", async (req, res) => {
   try {
@@ -26,7 +25,7 @@ router.get("/add", async (req, res) => {
     res.render("base", {
       title: "Add Livro",
       view: "livros/add",
-      livros,
+      autores,
     });
   } catch (err) {
     console.error(err);
@@ -36,7 +35,7 @@ router.get("/add", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
-    const { nome, telefone, cursoId } = req.body;
+    const { titulo, tema, autorId } = req.body;
     await Livro.create({
       titulo,
       tema,
@@ -55,7 +54,7 @@ router.get("/edit/:id", async (req, res) => {
     const livro = await Livro.findByPk(id, {
       include: [{ model: Autor, as: "Autor" }],
     });
-    const autores = await Autores.findAll();
+    const autores = await Autor.findAll();
     if (livro) {
       res.render("base", {
         title: "Edit Livro",

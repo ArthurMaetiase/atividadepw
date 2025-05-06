@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Erro ao recuperar produtos");
+    res.status(500).send("Erro ao recuperar alunos");
   }
 });
 
@@ -35,10 +35,9 @@ router.get("/add", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
-    const { nome, telefone, cursoId } = req.body;
+    const { nome, cursoId } = req.body;
     await Aluno.create({
       nome,
-      telefone,
       cursoId,
     });
     res.redirect("/alunos");
@@ -74,10 +73,10 @@ router.get("/edit/:id", async (req, res) => {
 router.post("/edit/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { nome, telefone, cursoId } = req.body;
+    const { nome, cursoId } = req.body;
     const aluno = await Aluno.findByPk(id);
     if (aluno) {
-      await aluno.update({ nome, telefone, cursoId });
+      await aluno.update({ nome, cursoId });
       res.redirect("/alunos");
     } else {
       res.status(404).send("Aluno não encontrado");

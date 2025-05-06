@@ -1,8 +1,20 @@
 <h1>Editar Livro</h1>
 <form action="/livros/edit/<%= livro.id %>" method="POST">
     <div class="form-group">
-        <label for="nome">Livros</label>
-        <input type="text" class="form-control" id="nome" name="nome" value="<%= livro.titulo %>" required>
+        <label for="titulo">Titulo</label>
+        <input type="text" class="form-control" id="nome" name="nome" required>
+    </div>
+    <div class="form-group">
+        <label for="tema">Tema</label>
+        <input type="text" class="form-control" id="tema" name="tema" required>
+    </div>
+    <div class="form-group">
+        <label for="autor">Autor</label>
+        <select class="form-control" id="autor" name="autorId" required>
+            <% autores.forEach(autor => { %>
+                <option value="<%= autor.id %>"><%= autor.nome %></option>
+            <% }) %>
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">Atualizar</button>
 </form>

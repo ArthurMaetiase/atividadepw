@@ -7,7 +7,7 @@
         <tr>
             <th>ID</th>
             <th>Nome</th>
-            <th>Email</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +19,7 @@
                 <td>
                     <%= autor.nome %>
                 </td>
+             
                 <td>
                     <a href="/autores/edit/<%= autor.id %>" class="btn btn-primary btn-sm">Editar</a>
                     <form action="/autores/delete/<%= autor.id %>" method="POST" class="d-inline">

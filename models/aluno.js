@@ -4,10 +4,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    telefone: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+  
   });
 
   Aluno.associate = (models) => {

@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { Autor } = require("../models"); 
+const { Autor } = require('../models');
 
 router.get("/", async (req, res) => {
     const autores = await Autor.findAll();
@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
             view: "autores/show",
             autores,
     });
-  });
+});
 
 router.get("/add", async (req, res) => {
     res.render(
@@ -22,16 +22,16 @@ router.get("/add", async (req, res) => {
 
 router.post("/add", async(req, res) =>{
     await Autor.create({nome: req.body.nome});
-    res.redirect("/cursos")
+    res.redirect("/autores")
 });
 
 router.get("/edit/:id", async (req, res) => {
-    const autor = await Autor.findByPk(req.params.id);
+    const Autor = await Autor.findByPk(req.params.id);
     res.render(
         "base", {
             title: "Editar Autor",
-            view: "autor/edit",
-            autor,
+            view: "autores/edit",
+            Autor,
     });
 });
 
